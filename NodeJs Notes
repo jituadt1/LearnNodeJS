@@ -1,0 +1,1093 @@
+What is node.js?
+
+-> It is an open source and cross platform runtime environment for executing javascript code outside of browser.
+
+-> We often use node to build back end services like API(Application Programming Interface). These are the services that power ups the client applications.
+
+-> Web apps and mobile apps are just interface which user can sees and interact, they need to communicate with server or a cloud to store data, send emails, push notifications and workflows so on.
+
+-> Node is ideal for building Highly Scalable, daa-intensive and real-time backend service that power ups the client applications. 
+
+-> Why do you use node on other framworks like asp.net, ruby and rails?
+
+==> Because it is easy to use and learn
+
+==> It is great for prototyping and agile development 
+
+==> It is also used for superfast and highly scalable services. 
+
+==> Its is currenly used by many known firms like, Paypal, Uber, Netflix and Walmart. 
+
+==> In paypal they have built one java & spring based application using node and they have found,
+
+1) Built twice as faster with fewer people 
+
+2) 33% fewer lines of code
+
+3) 40% fewer files
+
+5) More importantly they doubled the Request/Sec and decresing the average response time by 35%.
+
+SO Node is an excellent chocie. 
+
+6) If you are a front-end developer and know javascript then you can reuse your javascript skills and transition to a full stack developer in a meantime. 
+
+7) With you use of javascript both the front-end and the back-end your source code will be cleaner and more consitent.
+
+8) Another benifit is that it has large ecosystem of open source libs to use. So you dont need to build it from scratch you can just focus on core application functions.
+
+
+
+Architecture of NodeJS:
+
+As you know it is a runtime environment for executing javasctipt code.
+
+What is runtime environment then?
+
+==>> Before node we only use javascript to build applications that runs inside of a browser. 
+
+Every browser has a "JS Engine" what we can call javascript engine. ==> That takes javascript code and converts into the code that a computer can understand.
+
+Example : Internet Exploere uses ==> Chakra , Mozzila uses ==> Spider Monkey, Chrome ==> V8 JS engines. 
+
+Because of this varities javascript code can behave differently in one browser and another. 
+
+Broswers provides run time environment for javascript code. 
+
+Ryan Dahl ==> Implement the javascript that runs outside of a browser. 
+
+==> So he took fastest JS Engine (V8 engine) and embeded in a C++ program and call is Node.exe. So similer to a browser, node is a runtime environment for javascript code. It contains the JS engine that can execute javascript code. but it has certain objects that provide an environment for javascript code. 
+
+These object are different then we have in browser like we dont have "document.getElementById()" instead we have more other object that give us more interesting capabilites 
+
+for example ==>> fs.readFile(). we can work with the file system 
+		 ==>> listen for a request => http.creatServer() for a given port and so on.
+
+		 We can not do stuff like that inside in a browser.	
+
+
+		 SO node is a program that includes V8 JS engine and addiional modules that give us capabilies not avaialble inside a browser. like filesystem and network and so on.
+
+
+		 Both chrome and Node shares the smee JS engine but provides the different runtime enviornment for javascript.
+
+		 Often prople compare node to other programming languages but they are wrong becase node in not a programming language.
+
+		 Even node should not be compare with framework like asp.net, rails and jangle because these are framework for building web applications. (Node is runtime environment for executing javascript code.)
+
+
+
+
+
+How node works?
+
+-> Node is highely scalable because of non-blocking and Asynchronous nature of node.  
+
+==> Asynchronous means => if a waiter takes the order for one table and give it the kitchen and then takes order for another table while your meal is preparing so you dont have to wait for one mean while it is been prepared in kitchen , one waiter can server many different tables. So in node single thread can handle multiple requests together. so ts call asynchronous.
+
+In contrast to asychronous we also have blocking and synchornous objects. And that is how application with asp.net and rails framework works.
+
+So in normal case, when we recieve a request on the server a thread is allocated to it, in part of handling that  request its likely they are going to query a database. and you know sometime it takes a little while until the result is ready. when the database is executing the query that thread is sitting there waiting. It can not be used to serve another client. and it needs new thread to serve another client.
+
+Imagine if we have large number of client and we run out of threads at some point then new clients have to wait until free threads are avaialable. or we need to add more hardwares. So it implies you are not utilizing the resources efficiently. It is the problem if blocking and synchronouse architecture and you have to do more work to make it asynchronouse.
+
+SO by defualt node is asynchronous in nature so you dont have to build anything extra. So we have single thead to handle all request. 
+
+===> When a request arives that thread is used to handle that request. If we need to query a database that thread does not have to wait for database to return the data. While database is executing the query that thread is used to server another client and when databaes perpares the result it will put the message in what we call "Event Queue".
+
+===> "Event Queue" : node is continously monitoring this queue in background. When it finds an event in this queue it will take it out and process it.
+
+This kind of architecture makes node ideal for building application that include a lot of desk and network access. We can serve more client without throwing more hardwares. and that is why node applications are highly scalables.
+
+Do not use nod for CPU-intensive apps like video encoding and an image manipulation service. Because in this application there is a lot of calculation that is done by cpu and few operation that touches the file system and the network.
+
+So as node is single threaded while perfoming calculation to serve one client then other clients have to wait and that is why node should not be used for CPU intensive application. It should only be used data intensive and runtime applications.
+
+
+How to install node and make application?
+
+==> Go to https://nodejs.org and download and install it.
+
+==> download visual studio code editor for wiriting the code.
+
+
+Node Module System : Here we will learn module system in 1) OS 2) Filesystem 3) Events 4) HTTP. You will also learn how to creat your own modules.
+
+Global Object : These function we can call on client, in a browser and in node.
+			 This is the object which can be called from any where. 
+			 like "Console.log();": to log something on the console,
+			 "SetTimeOut();": To call a function after a delay of 1 sec or more.
+			 "SetInterval()" : to call a function repetadly after some interval of time. 
+			 "ClearInterval()" : to stop the function to be called 
+
+
+
+
+Now when we declare any variable in javascript it will be declared as a global veriable.
+
+==> in browser we can call this variable by ,
+
+var message = 'Hello';
+
+window.console.log(message);
+
+==> where in node it doesnt support the window object so, we can call like this,
+
+global.console.log(message);
+
+
+
+Why we use module system? 
+
+Here when we declare any function in javasctipt and it always be declared as a global function like,
+
+var name = function(){
+	
+
+}
+
+window.function();
+
+
+So the problem here is in real world application we often split the javascript code in multiple file and if we declare two functions with the same name and we call the second function it will overide the first function definiation. 
+
+So to overcome from this problem we use module system. 
+
+
+So in order to creat scalable and reliable application we need to creat small building blocks and modules in which we defines veriables and functions. So two variables and two function with the same names dont overide with one variable and function in different modules.
+
+In core of node we have concept called module. Every file in node applicatio is considered as a module. The variables and functions defined in that file called scope to that module.
+
+In Object Oriented Concept we can say they are private, they can not be accessed outside of that module. 
+
+If you want to use that module or a function you need to explicitly export that module and make it public.
+
+Every node js file has atleast one file and one module which we call main module.
+
+So every file in node is a module and every variable and function is scope to that module. They are not avaialable outside of that module.
+
+
+
+Notes: if we declare any exported thing in constant variable and if overide that constant variable then we will get an error at compile time instead of run time.
+
+
+
+
+Module wrappher function: 
+
+As you know in node each module has its own scope of variable or you can say private. so how node does it.
+
+So whenever you call a module, node wrapps that module in a function like below, 
+
+function (export, require, module , __filename, __dirname){}
+
+export : shows the exported functions and objects 
+
+require : shows the modules that are require for the application 
+
+module : module references 
+
+_filename : name of the module and file 
+
+_dirname = path of that module
+
+so each module will be converted to the above function. 
+
+
+
+
+Event module : one of the core functionality of node is event modules. It respond to every event in webapplication if it called. 
+
+Main class  : EventEmitter => One of the core building blocks of node. A lot of classes are based on this EventEmitter.
+
+A class is container of methods and related properties.
+
+
+
+What is RESTful APIs: REST stands for (Respresentational State Transfer)
+
+
+In each web application there is a client and a server. 
+
+Client acess the services from the server through HTTP protocol. 
+
+HTTP protocol is used for all CRUD(Create, Reaad, Update, Delete) Operations on client side.
+
+
+Example: Suppose there is an VIDLY web-application who is renting movies to clients.
+
+Then there is server of Vidly.com and it provides some services.
+
+Client web application contains the list of customers and they can communicate with the server through this api link 
+
+"http://vidly.com/api/customers" => client will send the http request to this url and communicate with the server.
+
+if you wanna use secured channel then you can use HTTPS module.
+
+"https://vidly.com/api/customers"
+
+api can be a subdomain like below ,
+dd
+"https://api.vidly.com/customers"
+
+Endpoints can be :  "https://vidly.com/api/customers"
+
+				"https://vidly.com/api/movies"
+
+				"https://vidly.com/api/rentals"
+
+				"https://vidly.com/api/address"
+
+
+
+So each opertion  can be done by sending http request to that endpoints. 
+
+like in Customer operation : creating a customer , updating a customer , deleting a customer will be done by sending https request to this endoint => "https://vidly.com/api/customers"
+
+
+HTTP modules : 
+
+1) GET : for reciving data
+
+2) POST : for sending data
+
+3) PUT : for updating data
+
+4) DELETE : for deleting data
+
+
+
+For each operation : 
+
+1) GET : Request => GET /api/customer 
+	    
+	    Response => Will return all the customers 
+
+	    			{ id=1 , name= '', 
+
+	    			   id =2, name= ''}
+
+
+GET : Request => GET /api/customer/1 
+	    
+	    Response => Will return the specific customer of id=1 
+
+	    			{ id=1 , name= ''}
+
+
+
+2) PUT : Request => PUT /api/customer/1
+	    
+	    Response => Will update the client  
+
+	    			{ id=1 , name= ''}
+
+3) POST : Request => POST /api/customer 
+ 
+				 { name = ''}
+	    
+	    Response => Will return all the customers 
+
+	    			{ id=1 , name= ''}
+
+
+4) DELETE : Request => DELETE /api/customer/1
+
+		  Response => Will delete the specified customer. 
+
+
+
+
+
+So in our application we can respond to each of the request through differen routes and give the response to each request. 
+
+This apporach is usable but it is not maintainable because we have to add each route to each request which can make it complex. 
+
+
+So we use "Framework" to simplify this process and make it maintainable.
+
+So there are some good framework which can be used to build web application and web service to the top of the node.
+
+Most popular is "Express".
+
+==> Express is very fast, light weight and perfectly documented.
+
+
+Command to install : make a new directory exaple : Express-demo 
+	
+==> npm init --yes : to creat package.json file
+
+==> npm i express : to install the express
+
+
+now you can use express library by: "requre('express'); "
+
+now creat an object : const app = express(); ==> so here express function is a top level function of Express module now. and app is an object to call all the methods inside it.
+
+You can call bunch of methods through this object like : app.get() , app.put(), app.post(), app.delete().
+
+
+Now we wanna implement a couple of endpoints which will repond to HTTP GET request.
+
+1) app.get() : It takes two arguments ==> 1) path or url 2) callback function.
+
+example : app.get('/', (req, res) ==> {
+	
+	res.send('Hello World');
+})
+
+==> So this function will return the output hello world to each get request.
+
+==> So in express we dont have to use if() statement for each get request or route. 
+
+==> Framwork like Express gives our application a structure.
+
+
+
+Nodemon : Shortname for Node Monitor 
+
+We saw that on each change in a file we have to stop the server and run it again to reflect the changes.
+
+but we can install the nodemon module in node to overcome from this situation.
+
+To Install : "npm i -g nodemon" => so here "-g" is used for global because we wanna use it globally.
+
+==> So here we just have run "nodemon filename.js" instead "node filenname.js"
+
+==> it will monitor all the changes in all the files and if anything is changed it will restart the server automatically so we dont have to do it manually.
+
+
+
+Environmment Variable : so in above all programs we used port(3000) which is an aribitory number.
+
+=> its gonna work in our machine but it might not work in production environment.
+
+=> Because when you deploy this application on host machine, this port might be occupied and not avaialable for your application.
+
+=> So a way to fix this is an environment variable.
+
+==> SO in hosting enviornment for node we have an environemnt variable for called "PORT".
+
+=> an environment variable is basically a variable that is the part of an environment in which process runs. Its value said outside of the application.
+
+
+SO in this application we need to read the value of "PORT" environment variable and in a way we do that is by using the "process" object. 
+
+"process.env.PORT" ==> process is a global variable, env is a property for environment variables, and PORT is an environment variable.
+
+==> so first we will try to read the value of environment variable PORT if it is avaialable then we can use it or we can use any arbitary port like below
+
+command  : const port = process.env.PORT || 3000 
+
+so it will check if environement variable PORT is avaialable if not it will assign the port 3000 
+
+==> we can also creat the environment variable in our application like below , 
+
+command : In windows ==> set PORT=5000
+
+		In MAC ==> export PORT=5000
+
+==> So this is the proper way to assign a port to the node application.
+
+
+
+Get request for a specific customer :
+
+commands: app.get('/api/customers/:id', (req, res) => {
+	
+	res.send(req.params.id); 
+
+	});
+
+==> so like above code we can fetch the information of one customer through this get request.
+
+
+	    			   
+
+Get request for multiple paramters : 
+
+commands: app.get('/api/posts/:param1/:param2', (req , res) => {
+	
+	res.send(req.param);
+})
+
+==> so through the above code we can get mulitple parameters. liek ==> "https://localhost:5000/api/posts/2019/1" ==> results : { year:2019 , month: 1}
+
+
+=> Here we can also pass the "Query Parameter" in this above get request. 
+
+like "localhost:5000/api/posts/2019/1?sortBy=name"
+
+==> we use query sting paramters to provide additional data to our backend service.
+
+==> SO use route paramters for essential and required values (like 2019/1) where we can use queryString Parameter for anything that is optional.
+
+SO we can use query parameter in our application like below,
+
+we use "res.send(req.query)" instead of "res.send(req.params)"
+
+
+
+
+We have two data types here : 1) Constt 2) let
+
+1) Const(stand for "Constant") : used to define a constant which we dont wanna reset later 
+
+2) let (stand for "later") : used to define a variable which we gonna reset later.
+
+
+Now get request with resources  :
+
+for resource we defines an array, 
+
+const customers = [{id:1, name: 'john'}, {id:2, name: 'jay'}];
+
+app.get('/api/customers/:id' , (req, res) => {
+	
+	const cust = Customers.find(c => c.id == parseInt(req.params.id));
+
+	if(!cust){ res.status(404).send('Customer does not exist.')}
+	else {res.send(cust)}
+})
+
+==> so from the above code we get details of customer by using id as a paramter, and if there is no user then we will get 404 status code.
+
+
+
+
+Post requests :
+
+So in post request we send data through post request. so body will contain the objects property and object values.
+
+So it is done by parsing json in the request body. ==> this is bydefault desabled in express 
+
+To enable it, add this line at the top ==> app.use(express.JSON()); ==> basically "express.JSON()" is the middel ware code and "app.use()" will use that middle ware in request processing pipelines.
+
+
+To check the POST request we use ==> PostMan Chrome extension
+
+open the extenstion => go to the post request => select body => select raw => select the JSON data => and enter the data => click send.
+
+==> also check the response below.
+
+
+Input Validation:
+
+what if client dont send the data in json formate or foget to add the object propery?
+
+so we use Inpute Validation ==> never trust the client input always validate thier inputs.
+
+So for input validation ==> we use "JOI" moduel ==> which is best for input validation.
+
+To install it ==> "npm i joi" 
+
+for a perfect version use command like this ==> "npm i joi@13.1.0"
+
+JOI ==> with the best way we use schema ==> schema contains the shape of our objects, we define what are the objects, what are there properties , what is the length, what is the type and so on.
+
+just add the require mode ==> const Joi = require('joi');
+
+then define the schema  ==> const schema = { name: Joi.string().min(3).required()}; ==> which defines the shape of the object.
+
+then use ==> const result = Joi.validate(req.body, schema)
+
+so the above validation result gives the two objects ==> 1)Error 2)value
+
+if the result is valid then => error: null 
+						  
+						 values : {name: 'john'}
+
+
+if the result is not valid then => error: error details
+						  
+						     values : null
+
+						     ==> only one of these object will has have a value.
+
+				
+
+To show the response to the clien,
+
+if(result.error){
+	
+	res.status(400).send(result.error) // will show the full error message with details.
+
+	res.status(400).send(result.error.details[0].message) // will show only the error message.
+};
+
+SO this is how "JOI" module is the best for Inpute Validation.
+
+
+Object distructuring : So in object distructuring we use the object property directly instead of "object.property.""
+
+example. ==> const result = validateRequest(req.body);
+		   
+		   const { error } = validationRequest(req.body); // so here "error" is the property of result object. like "result.error"
+
+
+
+PUT method : update request
+
+
+app.put('/api/customers:id', (req, res) => 
+
+const cust  = customers.find(c => c.id === parseInt(req.params.id); 
+if(!cust) return req.status(404).send('Customer does not exist'); 
+
+// Look up the course
+// if not exist, return 404 not found error
+
+cosnt { error } = validateCust(req.body);
+if(error) return req.status(400).send(error.details[0].message);
+// validate the request 
+// if invalid, return 400 bad request
+
+
+cust.name = req.body.name;
+
+res.send(cust);
+// update the table
+// return the updated record.
+
+
+)
+
+
+Delete Method :
+
+in delete method we gonna use the same approch with a little bit difference.
+
+app.delete('/api/customers/:id', (req, res) => {
+	
+	//to see if tje emp is is exit or not.
+	//if not then give 404 not found error.
+	const emp = employees.find(e => e.id === parseInt(req.params.id));
+	if(!emp) return res.status(404).send('Employee does not exist!');
+
+	//now find the index of the employee in array 
+	const index = employees.indexOf(emp);
+	//delete that employee
+	employees.splice(index, 1);
+
+	//in resoose give the deleted record back
+	res.send(emp);
+})
+
+
+=================================================================================================================================================================================
+
+
+Body Parser => So its used for parsing the data from the request and reciving data from the forms.
+
+
+SO you can install dependencies in two ways 
+
+1) through command line like ==> npm install body-parser 
+
+or
+
+2) just writing manually in the "package.json" file 
+
+example : "dependencies" : {
+	
+	"express":"*",
+	"body-parser" : "*"
+}
+
+
+==> and at the end just type ==> npm install (it will install all the newly added dependencies.)
+
+
+Static folder or file location :
+
+==> in this we are using the static file location to show only the public files to the client. 
+
+example : app.use(express.static(path.join(__dirname, 'public')));
+
+so it will point to the public file directories whenever there is any request.
+
+
+That index.html file in public directory will always overide what we have in index.js file.
+
+
+
+==================================================================================================
+
+Whats is middleware in nodejs?
+
+==> SO middleware is the subset of chained functions called by the express JS routing layer before user defines function is invoked. 
+
+==> Middleware functions have the full access to the request and response objects and can modify them.
+
+=================================================================================================
+
+What is EJS? 
+
+==> EJS stands for "Effective Javascript Templating". 
+
+==> Its a simple templating language that lets you generate HTML markup language with plain JavaScript.
+
+==> It is so simple and easy to use. 
+
+==> to install : "npm i ejs --save"
+
+
+How to use this? 
+
+==> you have to define "view engine" for "ejs" module and "views". you also have to give the path to views folder like below,
+
+app.set('view engine', 'ejs'); //view engine defined
+
+app.set('views', path.join(__dirname, 'views')); //path to views folder.
+
+
+Make a new folder of "views" and add a file like below,
+
+index.ejs ==> <h1>hello from ejs module </h1>
+
+and you just have to render that view page as below,
+
+res.render('index'); // instead of "res.send('hello');"
+
+=================================================================================================
+
+How to pass data in ejs module?
+
+==> so here you can also pass the data like "title", "header","javascript" also,
+
+==> to do that just pass the data in second argument of "res.render()" request like below 
+
+app.get('/', (req, res) => {
+	
+	res.render('index', {
+
+		title: 'Customers'
+	});
+})
+
+and to render in that "index.ejs" file you have to use below systax. 
+
+To render values ===> "<%= variavle-name %>" //this is the syntax for getting the values of variables in ejs file.
+
+so for this above title value we will call this in ejs as below ,
+
+index.eje :
+
+<h1><%= title %></h1>
+
+Ressult : 
+
+Customers
+
+=================================================================================================
+
+You have seen a lot of times in every HTML page we have to include <html> and <head> all that common tag before main coding
+
+=> So we can use "partials" to make it simpler then before. 
+
+=> Just make a folder name partials and add two files 
+
+	1) header.ejs
+
+		<html>
+			<head>
+				<title> Title Name </title>
+			</head>
+			<body>
+
+	2) footer.ejs
+
+			</body>
+		</html>
+
+
+=> So as you can see i have two of these files with common header and footer html tags.
+
+=> to use this in a file you just have to include both of this file like below 
+
+<% inlcude foldeName/fileName %> 
+
+in out case:
+
+<% include partials/header %>
+<% include partials/footer %>
+
+if we want to access an array from index.js fiie in index.ejs file then,
+
+We use "<%= " for getting any exact value of variable 
+
+and "<% " for access anything.
+
+To access an array ,
+
+<ul>
+<% users.forEach(function(user) { %>
+	<li> <% user.first_name %><% user.last_name %></li>
+ <% }) %>
+ </ul>
+
+ So this is the approch you can access an array.
+
+
+=================================================================================================
+
+
+Express-validator : To validate the user's input.
+
+To install : "npm i express-validator --save"
+
+=================================================================================================
+
+
+Database: MongoDB
+
+To downlad => go to https://mongodb.com and download it
+
+==> Its called NOSQL database and document database.
+
+==> Data or record are stored as a document.
+
+==> It uses JSON(Javascript Object Notation) like syntex.
+
+==> NOSQL database are much different then relational databases like MYSQL or Postgras. In relational database you really have to map out everything.
+
+==> You have to figure out exact schema and what tables you use, what field you use and event the what types of data you use like string, intergers and all that stuff.
+
+==> SO with NOSQL there is not really any of that. You should to plan out your structure of database in your collection but you dont have to predefine your structuring before building your applcation.
+
+==> One of the advantage of MongoDB and NOSQL is they are "Scalable". They are also much faster in most type of operation. There are some operation that better fits in relational database but when you have to deal with crape load of data then NOSQL is useful until there are not a ton of interconnected relationships.
+
+
+Get statrted with:
+
+==> So first install the MongoDB and then select the path where you want to install like "C:\mongodb"
+
+==> Then make two folders named 1)Data 2)log 
+
+==> in "Data" folder make another one for "db" in which we will list all the database.
+
+Next steps: 1) Open the command prompt 
+		
+		  2) go to bin directorty ==> cd C:\mongodb\bin
+
+		  //before the third step start CMD as an administrator otherwise below command will not work 
+
+		  3) run ==> mongod --directoryperdb --dbpath c:\mongodb\data\db --logpath C:\mongodb\log\mongo.log --logappend --rest --install
+
+		  So the above command is used for addign the new db path and log path and to install the rest of settings.
+
+		  4) Finally start mongodb ==> net start MongoDB
+
+
+
+
+================================================================================================
+
+Database Operation:
+
+==> To see the avaialable database : show dbs
+
+==> To create a new database : use databasename => it will create the database as database name and switch you to that database.
+
+==> to see the current database : db
+
+Now create users:
+
+==> command : db.createUser ({
+		
+				user: "john",
+				pwd: "john1234",
+				roles: [ "readWrite", "dbAdmin"]
+
+			});
+
+================================================================================================
+
+Collections : collections are very similler to tables in a database. Basically they hold documents or records.
+
+==> To creat a collection,
+
+==> command : db.createCollection('customers');
+
+==> To see the collections,
+
+==> command : show collections
+
+================================================================================================
+
+Document or Record : Basically a record or a raw contains data.
+
+==> To insert a document ,
+
+==> command : db.customers.insert ({
+	
+		first_name: "John",
+		last_name: "Adtani"
+	});
+
+==> So we have instered one document or a record.
+
+==> To see the inserted document ,
+
+==> db.customers.find();
+
+==> so here an "ObjectID{vfvfdvzvzzdvz}" is automatically generated so we dont have to give id manually.
+
+==> In relational database we have to give ID eachtime and make it autoincrement and assign as primary key.
+
+==> So in MongoDB it is done automatically, we dont have to worry about it.
+
+================================================================================================
+
+SO after addiing some user if we wont to assign a new field to only one record then we can not do it in relational database. 
+
+==> we have to specify new column for whole new collection, we can not add just directly. 
+
+==> So in MongoDB we can do that. We dont have worry about the whole collection, we can add new field or attribute in a single record. 
+
+example :
+
+==> command : db.customers.insert( [
+	{
+	
+		first_name: "Mark",
+		last_name: "Allison"
+	}
+	{
+		first_name: "Steve",
+		last_name: "Jobs",
+		gender: "Male"
+	}
+]);
+
+==> So as you can see that we have added extra "gender" property in only one entry.
+
+==> To see it in a proper way just type below command ,
+
+==> command : db.customers.find().pretty();
+
+================================================================================================
+
+Update Operation in MongoDB :
+
+==> so to update any record or document you need to type below syntax 
+
+==> command : db.customers.update ({name that we wanna update},{ what we want to update});
+
+==> command : db.customers.update ({first_name: "John"}, {first_name: "JOhn2", last_name: "Smith", gender: "male"});
+
+Note: there is problem in above command, so it basically search the first_name if matched then it will override the field that we added in second curly bracket. 
+
+==> so if we only add the first_name then it will update the record named "john" and add only the first name, all other field will be deleted.
+
+ 
+Solution ==> so to over come from the above problem we will add the "$set" attribute. 
+
+==> so this "$set" attribute will keeps the all previous fields and update only those field we add after it, like below
+
+==> command : db.customers.update({first_name: "Mark"}, {$set : {gender: "Male"}});
+
+================================================================================================
+
+Increment : we can use "$inc" attribute to increment a value.
+
+==> So here we can also increment a value inside a document like below ,
+
+==> command : db.customers.update({first_name:"Steve"}, {$inc: {age:5}});
+
+==> so if the customer has an age : 45 then after above command his age will be incremented by 5 : 50
+
+================================================================================================
+
+Unset : Delete any attribute in a docuement or a record. 
+
+==> command : db.customers.update({first_name:"Steve"}, {$unset: {age:1}});
+
+==> So this command will delete the age attribute in the "Steve" document or record.
+
+================================================================================================
+
+upsert : So when we trying to update any record and if we could not find that we can insert instead. 
+
+==> so to insert a record after not finding in the document we use "upsert" attribute.
+
+==> command : db.customers.update({first_name:"Mary"}, {first_name:"Mary", last_name:"Samson", gender:"female"},{upsert: true});
+
+==> so a new record with name "Mary" will be added in the document.
+
+================================================================================================
+
+Rename : we can also rename the field or column name in the document through this "rename" property
+
+==> command : db.customers.update({first_name:"Mary"}, {$rename:{"gender":"Sex"}});
+
+==> so this command will change the field name from "gender" to "sex".
+
+================================================================================================
+
+remove : To Delete to whole record from a document. 
+
+==> command: db.customers.remove({first_name: "Steve"});
+
+==> this command will remove a record whose first_name is "Steve".
+
+Note : so from above command it will delete all the record whose first_name is "Steve". So what if we want to delete only one record.
+
+Solution : just add one propery named "justone:true" or "justOne:1". So this will only remove the first "Steve" from the document. 
+
+==> command : db.customers.remove({first_name:"Steve"},{justOne:true});
+
+==> so this will delete the first record whose firs_name is "Steve".
+
+================================================================================================
+
+find : To find a record in a document. 
+
+==> command : db.customers.find({first_name:"John"});
+
+==> So this command will return the details of record whose first name is "john".
+
+==> If we want to find details of two or more record then we can type below command.
+
+==> command : db.customers.find({$or:[{first_name:"John"},{first_name:"Mary"}]});
+
+==> so the above command will return the details of record whose name match with "john" and "mary".
+
+
+Same as for any field we want to find: 
+
+example for geneder: 
+
+==> command : db.customers.find({gender:"male"});
+
+==> it will return all the record whose gender is "male".
+
+
+For conditions like greater then and less then we can use below commands ,
+
+==> command : db.customers.find({age:{$lt:40}}).pretty();
+
+==> this command will return the all record whose age is less then 40.
+
+==> db.customers.find({age:{$gt:40}}).pretty();
+
+==> this command will return all the values whose age is greater then 40.
+
+
+For two conditons like (<= or >=) :
+
+==> we can use "$lte" for less then or equal to,
+
+==> and "$gte" for greater then or equal to.
+
+
+To find the record who have a city in its address field we can use below command,
+
+==> command : db.customers.find({"address.city":"Boston"}); //we have to mention first propery "address.city" in quotes othersie it will not work.
+
+==> So this will return the record who has city as boston.
+
+
+If we want to query an array then it is so simple as below command,
+
+==> command : db.customers.find({memberships:"mem1"}); 
+
+==> So this command will return the record who has "mem1" in memberships.
+
+
+If we wanna sort the output like sory by ascending or decending order we can use below commands.
+
+==> command : db.customers.find().sort({last_name:1}); 
+
+==> so the above command will return the record in ascending order according to "last_name"
+
+Same as decending order,
+
+==> command : db.customers.find().sort({last_name:-1});
+
+
+If we want to count the records in a document we can use below command,
+
+==> command: db.customers.find().count();
+
+==> above command will return a number which is the number of record in this document.
+
+==> for a specific cound like count number whose gender is male you can use below command,
+
+==> command : db.customers.find({gender:"male"}).count();
+
+==> this will return a number of records who have gender as "male".
+
+
+If we want to limit the outout like only first 4 record from a document then we can use below command,
+
+==> command : db.customers.find().limit(4);
+
+==> so this will return only first 4 records from this document.
+
+
+And you can sort this query also, 
+{
+==> command: db.customers.find().limit(3).sort({last_name:1}}); 
+
+==> return the first 4 records in ascending order according to "last_name".
+================================================================================================
+ 
+forEach Loop : We can do another cool thigs by iterating the document with "forEach loop"
+
+==> command : db.customers.find().forEach(function(doc) { print ("Customers Name:" +doc.first_name)});
+
+==> So the above command will return only the first_name of each record.
+
+
+
+================================================================================================
+
+
+Now if we want to use MongoDB in our web application we can follow the steps below,
+
+==> monogojs : mongojs is the module we can use in node to connect to the database.
+
+To install MongoDB :
+
+==> command : npm i mongojs --save
+
+then add the below properties,
+
+==> const mongojs = require('mongojs'); //to inlclude the module.
+
+==> const db = mongojs('databaseName', ['collectionName']);
+
+for example : ==> const db = mongojs('customerApp', ['users']);
+
+
+now in get reqest we will add a fuction : 
+
+==> app.get('/', (req, res) => {
+	
+		db.users.find(functions(err, docs) {  
+					console.log(docs);				// will return mongodb database data in console log.
+				});
+================================================================================================
+
+To add users in MongoDB from a web-application:
+
+==> so just add below functions to insert into the database.
+
+==>	db.users.insert(newUser, functin(err, docs) {
+	
+			if(err) return console.log(err);
+
+			res.redirect('/');
+		});
+
+================================================================================================
+
+To delete the user,
+
+==> So here we have to use "JQuery" and "AJAX" request to delete the user.
+
+==> So first here we have to include the "JQuery" script in the header file.
+
+To do that ==> go to "https://code.jquery.com" and copy the scipt you wanted and paste it into the header file. 
+================================================================================================
